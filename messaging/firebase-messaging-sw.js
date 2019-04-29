@@ -1,10 +1,25 @@
 // Import and configure the Firebase SDK
 // These scripts are made available when the app is served or deployed on Firebase Hosting
 // If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup
-importScripts('/__/firebase/5.5.6/firebase-app.js');
-importScripts('/__/firebase/5.5.6/firebase-messaging.js');
-importScripts('/__/firebase/init.js');
+importScripts('https://www.gstatic.com/firebasejs/5.2.0/firebase.js');
+importScripts('https://www.gstatic.com/firebasejs/5.2.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/5.2.0/firebase-messaging.js');
 
+  
+ // Initialize Firebase
+ var config = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: ""
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+  
+}
 var messaging = firebase.messaging();
 
 /**
@@ -47,4 +62,6 @@ messaging.setBackgroundMessageHandler(function(payload) {
   return self.registration.showNotification(notificationTitle,
     notificationOptions);
 });
+
+
 // [END background_handler]

@@ -57,6 +57,14 @@ limitations under the License.
           <!-- div to display the UI to allow the request for permission to
                notify the user. This is shown if the app has not yet been
                granted permission to notify. -->
+          <div id="sendmessage_div" >
+            <h4>Send Message</h4>
+            <p id="mesg"></p>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"
+                    onclick="sendMessage()">Send Message</button>
+          </div>
+
+
           <div id="permission_div" style="display: none;">
             <h4>Needs Permission</h4>
             <p id="token"></p>
@@ -80,13 +88,27 @@ limitations under the License.
 <script src="/__/firebase/init.js"></script>
 
 <script>
+
+var config = {
+  apiKey: "AIzaSyCUPPqgQebcLvfXtwYwj-BaQeWyJ2AWR9Q",
+  authDomain: "atlas-work.firebaseapp.com",
+  databaseURL: "https://atlas-work.firebaseio.com",
+  projectId: "atlas-work",
+  storageBucket: "atlas-work.appspot.com",
+  messagingSenderId: "121541299236"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+  
+}
   // [START get_messaging_object]
   // Retrieve Firebase Messaging object.
   const messaging = firebase.messaging();
   // [END get_messaging_object]
   // [START set_public_vapid_key]
   // Add the public key generated from the console here.
-  messaging.usePublicVapidKey('<YOUR_PUBLIC_VAPID_KEY_HERE>');
+  messaging.usePublicVapidKey('BNlgVWwFj4AHD4tHYdLdqzA9UCgp2uqOby5Rcp_eMCDgDU0WdJlDXuFsAIbRAwUA04JdTy00nDzA0bhbNt3o06E');
   // [END set_public_vapid_key]
 
   // IDs of divs that display Instance ID token UI or request permission UI.
@@ -239,6 +261,35 @@ limitations under the License.
       // [START_EXCLUDE]
       showToken('Error retrieving Instance ID token. ', err);
       // [END_EXCLUDE]
+    });
+
+  }
+
+  function sendMessage(){
+
+    var key = 'AAAAHExtDCQ:APA91bFlHhz9ELUEQjnyY60_ePZYZaNevSr6v63BHQyZXdU6vB60wfMNdMwMZfz894zZLzZDPgCtiIMwUeqCgvNHLSw-5FIMk21uM2s01JMaL6-CZf7fypmZFzWyds0AsnnhKg62uum5';
+    var to = 'c8ZFHCOCRd0:APA91bGjSjxKQLn_EAOeHbFSMOuZug34bEVCeHE7Mo4nMAsFfqKz8kX31slRDe3JTfh1MwXaExnNEfjYFdmdXDW9tG9rgnEgbeYPW6d_BkXG1ycNBe0iYL2ou9W0WI1U6mhYhgRVYzRZ';
+    var notification = {
+      'title': 'Portugal vs. Denmark',
+      'body': '5 to 1',
+      'icon': 'firebase-logo.png',
+      'click_action': 'http://localhost:8081'
+    };
+
+    fetch('https://fcm.googleapis.com/fcm/send', {
+      'method': 'POST',
+      'headers': {
+        'Authorization': 'key=' + key,
+        'Content-Type': 'application/json'
+      },
+      'body': JSON.stringify({
+        'notification': notification,
+        'to': to
+      })
+    }).then(function(response) {
+      console.log(response);
+    }).catch(function(error) {
+      console.error(error);
     });
 
   }
